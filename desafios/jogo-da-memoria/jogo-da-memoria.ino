@@ -68,3 +68,93 @@ void loop() {
     esperarJogada();
     delay(1000);
 }
+
+void mostrarSequencia() {
+    for (int i = 0; i < rodada; i = i + 1) {
+        acenderLedTocarSom(sequencia[i]);
+        delay(200);
+    }
+}
+
+void esperarJogada() {
+    for (int i = 0; i < rodada; i = i + 1) {
+        bool jogadaFeita = false;
+        while (!jogadaFeita) {
+            if (digitalRead(botao1) == LOW) {
+                botaoPressionado = 1;
+                acenderLedTocarSom(botaoPressionado);
+                jogadaFeita = true;
+            } else if (digitalRead(botao2) == LOW) {
+                botaoPressionado = 2;
+                acenderLedTocarSom(botaoPressionado);
+                jogadaFeita = true;
+            } else if (digitalRead(botao3) == LOW) {
+                botaoPressionado = 3;
+                acenderLedTocarSom(botaoPressionado);
+                jogadaFeita = true;
+            } else if (digitalRead(botao4) == LOW) {
+                botaoPressionado = 4;
+                acenderLedTocarSom(botaoPressionado);
+                jogadaFeita = true;
+            }
+        }
+
+        if (sequencia[passo] != botaoPressionado) {
+            perdeu = true;
+            gameOver();
+            return;
+        }
+
+        passo = passo + 1;
+    }
+    passo = 0;
+}
+
+void acenderLedTocarSom(int id) {
+    int led = 0;
+    int nota = 0;
+    if (id == 1) { led = led1; nota = nota1; }
+    if (id == 2) { led = led2; nota = nota2; }
+    if (id == 3) { led = led3; nota = nota3; }
+    if (id == 4) { led = led4; nota = nota4; }
+
+    tone(buzzer, nota);
+    digitalWrite(led, HIGH);
+    delay(500);
+    digitalWrite(led, LOW);
+    noTone(buzzer);
+}
+
+void gameOver() {
+    for (int i = 1; i <= 4; i = i + 1) {
+        acenderLedTocarSom(i);
+        delay(100);
+    }
+    for (int j = 0; j < 4; j = j + 1) {
+        digitalWrite(led1, HIGH);
+        digitalWrite(led2, HIGH);
+        digitalWrite(led3, HIGH);
+        digitalWrite(led4, HIGH);
+        delay(100);
+        digitalWrite(led1, HIGH);
+        digitalWrite(led2, HIGH);
+        digitalWrite(led3, HIGH);
+        digitalWrite(led4, HIGH);
+        delay(100);
+    }
+}
+
+void tocarInicio() {
+    tone(buzzer, nota1);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    delay(500);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led1, HIGH);
+    noTone(buzzer);
+    delay(500);
+}
